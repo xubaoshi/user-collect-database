@@ -42,6 +42,10 @@ router.get('/log/event', async (ctx, next) => {
   const query = ctx.query
   if (query.pageView) {
     const logs = db.get('visits').filter({ pageView: query.pageView }).value()
+    if (query.start && query.end && logs.length > 1) {
+      ctx.body = { success: 1, logs: logs.slice(0, 2) }
+      return
+    }
     ctx.body = { success: 1, logs }
   } else {
     ctx.body = { success: 0 }
